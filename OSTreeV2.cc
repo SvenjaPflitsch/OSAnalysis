@@ -194,6 +194,7 @@ void OSTreeV2::FillTree(){
     }
     
     OS_Analysis_Tree->Write();
+    delete OS_Analysis_Tree; 
     
 }
 

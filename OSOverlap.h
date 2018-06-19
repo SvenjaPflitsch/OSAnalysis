@@ -112,9 +112,14 @@ public:
     // In different Input Files
     //OSOverlap(string Active_Input, string Active_TreeName, string Passive_Input, string Passive_TreeName); 
     
-    void ApplyExitCodeFilter(bool withExitCode1Extra); 
+    void ApplySameExitCodeFilter(bool withExitCode1Extra); 
     void ApplyWorkflowIssueFilter(); 
+    void ApplySiteIssueFilter(); 
     
+    // Only keep Workflows with this ExitCode (can only be used once because next iteration would overwrite the labels): 
+    void ApplyExitCodeFilter(string ExitCode1_Input, bool withExitCode1Extra);
+    // Remove Workflows with this ExitCode: 
+    void RemoveExitCode(string ExitCode1_Input, bool withExitCode1Extra); 
     
     
 }; 

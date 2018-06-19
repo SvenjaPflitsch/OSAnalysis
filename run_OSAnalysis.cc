@@ -30,8 +30,8 @@ void run_OSAnalysis()
     
     bool CreateTrees = false; 
     bool SortTrees = true; 
-    bool PlotBranches = true; 
-    bool PlotExamples = true; 
+    bool PlotBranches = false; 
+    bool PlotExamples = false; 
     
     
     
@@ -69,11 +69,25 @@ void run_OSAnalysis()
         // Different Filter options can be implemented in OSOverlap.cc
         // The Filters can be applied consecutively, before "FillOutputTrees()"
         
-        OSOverlap Analysis1("OSTrees_Test.root", "ActiveTree", "PassiveTree", "Output_Test.root"); 
-        //Analysis1.ApplyExitCodeFilter(true); 
-        //Analysis1.ApplyWorkflowIssueFilter(); 
+        /*OSOverlap Analysis1("OSTrees_Test.root", "ActiveTree", "PassiveTree", "Output_WorkflowIssues_SameExitCode.root"); 
+        Analysis1.ApplySameExitCodeFilter(true); 
+        Analysis1.ApplyWorkflowIssueFilter(); 
         //Analysis1.ApplySiteIssueFilter(); 
         Analysis1.FillOutputTrees(); 
+        */
+        
+        OSOverlap Analysis2("OSTrees_Test.root", "ActiveTree", "PassiveTree", "Output_RmExitCode.root"); 
+        //Analysis2.ApplySameExitCodeFilter(true); 
+        //Analysis2.ApplyWorkflowIssueFilter(); 
+        //Analysis2.ApplySiteIssueFilter(); 
+        
+        
+        Analysis2.RemoveExitCode("73", false); 
+        Analysis2.RemoveExitCode("50660", false);
+        Analysis2.RemoveExitCode("60450", false); 
+        Analysis2.RemoveExitCode("99393", false); 
+        Analysis2.FillOutputTrees(); 
+        
     }
     
     
@@ -107,9 +121,36 @@ void run_OSAnalysis()
             // For cases where the correlation between different branches of the same tree is plotted: 
             Paintbrush_Example.PlotLabelHistogramm2D("PassiveTree", "ExitCode1", 2, "ReasonWTC", 2); 
     
-        } // End of PlotExamples    
-     
-    }
+        }
     
     
-}
+    
+    
+        /*
+        OSPlotter Paintbrush_Workflows("Output_WorkflowIssues_SameExitCode.root"); 
+        
+        Paintbrush_Workflows.PlotLabelHistogrammStack("ActiveTree", "TreeOnlyActive_SameExitCodeFilter_WorkflowIssueFilter", "TreeOnBothActive_SameExitCodeFilter_WorkflowIssueFilter", "ExitCode1", 2); 
+        Paintbrush_Workflows.PlotLabelHistogrammStackNormalized("ActiveTree", "TreeOnlyActive_SameExitCodeFilter_WorkflowIssueFilter", "TreeOnBothActive_SameExitCodeFilter_WorkflowIssueFilter", "ExitCode1", 2); 
+    
+        
+        
+        OSPlotter Paintbrush_Sites("Output_SiteIssues_SameExitCode.root"); 
+        
+        Paintbrush_Sites.PlotLabelHistogrammStack("ActiveTree", "TreeOnlyActive_SameExitCodeFilter_SiteIssueFilter", "TreeOnBothActive_SameExitCodeFilter_SiteIssueFilter", "ExitCode1", 2); 
+        Paintbrush_Sites.PlotLabelHistogrammStackNormalized("ActiveTree", "TreeOnlyActive_SameExitCodeFilter_SiteIssueFilter", "TreeOnBothActive_SameExitCodeFilter_SiteIssueFilter", "ExitCode1", 2); 
+        */
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    } // End of PlotBranches
+    
+    
+}// End of config
