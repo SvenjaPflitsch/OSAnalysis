@@ -456,13 +456,14 @@ void OSOverlap::ApplyExitCodeFilter(string ExitCode1_Input, bool withExitCode1Ex
 
 
 // Only keep two Exit Codes: 
-void OSOverlap::ApplyExitCodeFilter(string ExitCode1_Input, bool withExitCode1Extra){
+void OSOverlap::ApplyExitCodeFilter(string ExitCode1_Input1, string ExitCode1_Input2, bool withExitCode1Extra){
     
     bool hasExitCode1; 
     FilterName += "_ExitCodeFilter";
-    FilterName += ExitCode1_Input;
+    FilterName += ExitCode1_Input1;
+    FilterName += ExitCode1_Input2;
     
-    cout<<"Only Entries with ExitCode: "<<ExitCode1_Input<<endl; 
+    cout<<"Only Entries with ExitCode: "<<ExitCode1_Input1<<" or "<<ExitCode1_Input2<<endl; 
     
     // Loop through active list: 
     for(int i0(0); i0 < Entries_Active; i0++){
@@ -471,7 +472,7 @@ void OSOverlap::ApplyExitCodeFilter(string ExitCode1_Input, bool withExitCode1Ex
         hasExitCode1 = false; 
         
         for(int i1(0); i1 < ExitCode1_Active->size(); i1++){
-            if(ExitCode1_Active->at(i1) == ExitCode1_Input) hasExitCode1 = true; 
+            if(ExitCode1_Active->at(i1) == ExitCode1_Input1 || ExitCode1_Active->at(i1) == ExitCode1_Input2) hasExitCode1 = true; 
         }
         
         if(!hasExitCode1)    Sort_Active[i0] = "SortedOut";
@@ -485,11 +486,11 @@ void OSOverlap::ApplyExitCodeFilter(string ExitCode1_Input, bool withExitCode1Ex
         hasExitCode1 = false; 
         
         for(int i1(0); i1 < ExitCode1_Passive->size(); i1++){
-            if(ExitCode1_Passive->at(i1) == ExitCode1_Input) hasExitCode1 = true; 
+            if(ExitCode1_Passive->at(i1) == ExitCode1_Input1 || ExitCode1_Passive->at(i1) == ExitCode1_Input2) hasExitCode1 = true; 
         }
         if(withExitCode1Extra){
             for(int i1(0); i1 < ExitCode1Extra_Passive->size(); i1++){
-                if(ExitCode1Extra_Passive->at(i1) == ExitCode1_Input) hasExitCode1 = true; 
+                if(ExitCode1Extra_Passive->at(i1) == ExitCode1_Input1 || ExitCode1Extra_Passive->at(i1) == ExitCode1_Input2) hasExitCode1 = true; 
             }
         }
         
@@ -508,6 +509,14 @@ void OSOverlap::FilterMultipleEntries(){
 
 
 
+
+
+
+
+
+
+
+// This is a general Filter without ExitCode distinction
 void OSOverlap::SetThresholdPercMin(float MinFailed){
     
     for(int i0(0); i0 < Entries_Active; i0++){
@@ -533,10 +542,58 @@ void OSOverlap::SetThresholdPercMin(float MinFailed){
 }
 
 
+// Threshold cuts for a specific exit code. 
+void OSOverlap::SetThresholdPercMin(float MinFailed, string ExitCode1_Input){
+    
+    std::vector<unsigned> DeleteIndex; 
+    
+    for(int i0(0); i0 < Entries_Active; i0++){
+        InputTree_Active->GetEntry(i0); 
+        bool OverMinFailed; 
+        
+        for(int i1(0); i1 < ThresholdPerc_Active->size(); i1++){
+            if(ThresholdPerc_Active->at(i1) > MinFailed && ExitCode1_Active->at(i1) == ExitCode1_Input) OverMinFailed = true; 
+        }
+        if(!OverMinFailed) Sort_Active[i0] = "SortedOut";
+    }
+    
+    
+    for(int i0(0); i0 < Entries_Passive; i0++){
+        InputTree_Passive->GetEntry(i0); 
+        bool OverMinFailed; 
+        
+        for(int i1(0); i1 < ThresholdPerc_Passive->size(); i1++){
+            if(ThresholdPerc_Passive->at(i1) > MinFailed && ExitCode1_Passive->at(i1) == ExitCode1_Input) OverMinFailed = true; 
+        }
+        if(!OverMinFailed) Sort_Passive[i0] = "SortedOut";
+    }
+}
 
 
 
-
+void OSOverlap::SetThresholdPercMin(float MinFailed, string ExitCode1_Input1, string ExitCode1_Input2){
+    
+    for(int i0(0); i0 < Entries_Active; i0++){
+        InputTree_Active->GetEntry(i0); 
+        bool OverMinFailed; 
+        
+        for(int i1(0); i1 < ThresholdPerc_Active->size(); i1++){
+            if((ThresholdPerc_Active->at(i1) > MinFailed && ExitCode1_Active->at(i1) == ExitCode1_Input1) || (ThresholdPerc_Active->at(i1) > MinFailed && ExitCode1_Active->at(i1) == ExitCode1_Input2)) OverMinFailed = true; 
+        }
+        if(!OverMinFailed) Sort_Active[i0] = "SortedOut";
+    }
+    
+    
+    for(int i0(0); i0 < Entries_Passive; i0++){
+        InputTree_Passive->GetEntry(i0); 
+        bool OverMinFailed; 
+        
+        for(int i1(0); i1 < ThresholdPerc_Passive->size(); i1++){
+            if((ThresholdPerc_Passive->at(i1) > MinFailed && ExitCode1_Passive->at(i1) == ExitCode1_Input1) || (ThresholdPerc_Passive->at(i1) > MinFailed && ExitCode1_Passive->at(i1) == ExitCode1_Input2)) OverMinFailed = true; 
+        }
+        if(!OverMinFailed) Sort_Passive[i0] = "SortedOut";
+    }
+}
 
 
 

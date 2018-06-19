@@ -118,12 +118,14 @@ public:
     
     // Only keep Workflows with this ExitCode (can only be used once because next iteration would overwrite the labels): 
     void ApplyExitCodeFilter(string ExitCode1_Input, bool withExitCode1Extra);
+    void ApplyExitCodeFilter(string ExitCode1_Input1, string ExitCode1_Input2, bool withExitCode1Extra);
     // Remove Workflows with this ExitCode: 
     void RemoveExitCode(string ExitCode1_Input, bool withExitCode1Extra); 
     
     // Threshold Filters: 
     void SetThresholdPercMin(float MinFailed); 
-    
+    void SetThresholdPercMin(float MinFailed, string ExitCode1_Input); 
+    void SetThresholdPercMin(float MinFailed, string ExitCode1_Input1, string ExitCode1_Input2); 
 }; 
 
 #endif
