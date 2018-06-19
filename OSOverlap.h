@@ -121,6 +121,8 @@ public:
     // Remove Workflows with this ExitCode: 
     void RemoveExitCode(string ExitCode1_Input, bool withExitCode1Extra); 
     
+    // Threshold Filters: 
+    void SetThresholdPercMin(float MinFailed); 
     
 }; 
 
